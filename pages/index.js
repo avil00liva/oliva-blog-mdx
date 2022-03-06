@@ -14,7 +14,7 @@ export default function Home({posts}) {
   return (
     <>
       <Head>
-        <title>Oliva Personal Blog</title>
+        <title>Oliva Personal Blog 🍀</title>
       </Head>
       <div className='bg-white dark:bg-black text-black dark:text-white w-full min-h-screen'>
         <MainContent posts={posts}/>
