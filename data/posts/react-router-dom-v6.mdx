@@ -1,0 +1,103 @@
+---
+title: Basic navigation in React using React-Router-Dom v6
+tags: 
+ - react
+ - react-router
+ - javascript
+date: "2022-03-06"
+excerpt: Most of the application you develop will have multiple pages and you would require to have a separate URL for each one of them.
+photoUrl: https://i.imgur.com/zajq4cb.jpg
+---
+
+# Navigation in React App using React Router (v6)
+
+
+<small className="ml-2 text-sm text-gray-700 dark:text-gray-300 mb-4">Avilo Oliva / March 06,2022</small>
+
+
+![React Router picture](https://i.imgur.com/zajq4cb.jpg "React Router picture")
+
+
+Most of the application you develop will have multiple pages and you would require to have a separate URL for each one of them.
+React cannot handle routing on its own. There are many libraries like **[react router](https://reactrouter.com/)**, **[react navigation](https://reactnavigation.org/docs/web-support/)** etc to handle navigation in react. In this post we will see how we can use react router to handle navigation in react apps.
+
+
+## Project setup
+
+
+Install the react-router-dom package:
+
+```md 
+$ npm install react-router-dom@6
+```
+```md
+$ yarn add react-router-dom@6
+```
+```md 
+$ pnpm add react-router-dom@6
+```
+
+
+## Basic Routing
+
+
+Now in ***index.js*** wrap the App component with the BrowserRouter component, which can be imported from the ***react-router-dom*** package that we just installed.
+
+
+```js
+import React from "react"
+import ReactDOM from "react-dom"
+import { BrowserRouter } from "react-router-dom"
+import App from "./App"
+import "./index.css"
+
+    ReactDOM.render(
+    <React.StrictMode>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </React.StrictMode>,
+    document.getElementById("root")
+    )
+```
+
+
+It is necessary to wrap any routes or links created using react router with ***Router*** component (in our case ***BrowserRouter***). So we wrap the whole application inside ***BrowserRouter***.
+
+
+## Now update ***App.js*** with the following code:
+
+
+```js
+import React from "react"
+import { Routes, Route } from "react-router-dom"
+import Home from './components/Home'
+import About from './components/About'
+import NotFound from './components/NotFound'
+
+function App() {
+  return (
+    <div className="App">
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="about" element={<About />}></Route>
+          <Route path="*" element={<NotFound />}></Route>
+        </Routes>
+    </div>
+  )
+}
+
+export default App
+```
+
+
+* The component that needs to be rendered when the user is navigated to a particular path is defined by the ***element*** property in the Route component. For example, ***/about*** route will render the ***About*** component.
+* If you want to display a 404 page when the path does not match with any of the routes then you can define a route with path as *.
+* Finally, we need to wrap all the ***Route*** components inside the ***Routes*** component, which is again exported from ***react-router-dom***.
+* The order of ***Route*** components does not matter. React router will match the best route irrespective of order.
+
+
+****
+
+
+<small className="ml-2 text-sm text-gray-700 dark:text-gray-300 mb-4">Last update 06/03/2022</small>

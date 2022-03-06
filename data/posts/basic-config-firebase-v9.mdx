@@ -1,0 +1,151 @@
+---
+title: Basic config for firebase v9 🔥
+tags: 
+ - react
+ - firebase
+ - database
+date: "2022-03-06"
+excerpt: Basic configuration for firabase, Basic configuration to get started with your projects.
+photoUrl: https://i.imgur.com/CqFNTny.jpg
+---
+
+# Basic configuration for firabase v9
+
+<small className="ml-2 text-sm text-gray-700 dark:text-gray-300 mb-4">Avilo Oliva / March 06,2022</small>
+
+
+![Database picture](https://i.imgur.com/CqFNTny.jpg "Database pictur")
+
+
+Get ready to start your personal project with firebase v9, next i will show you a easy setting:
+
+1. With a google account go to [firebase](https://firebase.google.com/)
+2. Access the console: Click on **Go to console**
+3. Create a new project:
+
+[![Firebase example image](https://i.imgur.com/cF9EXEp.png "Firebase example image")](https://i.imgur.com/cF9EXEp.png)
+
+4. Access the project settings to get the apiKey:
+
+![Firebase example image settings](https://i.imgur.com/3EbmhLd.png "Firebase example image settings")
+![Firebase example image create app](https://i.imgur.com/JACRRou.png "Firebase example image create app")
+
+5. Copy the whole text, this will be used in your code editor.
+6. In your project folder proceed to install firebase:
+```md
+$ npm install firebase
+```
+7. In your project folder create a file, you can named as you want **"Firebase.js"** for example an put something like this:
+```js 
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
+import { getAuth } from "firebase/auth"
+
+// Your web app's Firebase configuration
+
+const firebaseConfig = {
+    apiKey: *Your apiKey*,
+    authDomain: "twitter-clone-6bdee.firebaseapp.com",
+    projectId: "twitter-clone-6bdee",
+    storageBucket: "twitter-clone-6bdee.appspot.com",
+    messagingSenderId: *Your messagingSenderId*,
+    appId: *Your appId*
+};
+
+// Initialize Firebase 
+  const app = initializeApp(firebaseConfig)
+  export const storage = getStorage(app)
+  export const db = getFirestore();
+  export const auth = getAuth(app)
+  export const provider = new GoogleAuthProvider()
+  export default app
+```
+
+
+****
+
+
+## Examples of POSTs 
+
+
+In firebase v9 is implemented the new compact library *Modular*
+* > Modular - a new API surface designed to facilitate tree-shaking (removal of unused code) to make your web app as small and fast as possible.  
+
+<span className="text-lg font-semibold">Only import what you need</span>
+
+```js
+
+import { useEffect, useState } from "react"
+import { collection, doc, documentId, limit, onSnapshot, orderBy, query, setDoc, where } from "firebase/firestore"
+import { auth, db, provider } from "../firebase" 
+
+    const [posts, setPosts] = useState([])
+
+useEffect( ()=>{
+const getPost = async ()=> { onSnapshot(
+    query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(4)),
+    (snapshot)=>{
+        setPosts(snapshot.docs.map((doc)=> ({ ...doc.data(), id: doc.id})))
+    }
+    )}
+    getPost()
+}, [db])
+
+```
+
+
+****
+
+
+
+## Examples of Signin
+
+
+### Login using *signInWithPopup*
+
+
+```js
+
+import { signInWithPopup, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+
+    function signInWithGoogle () {
+        signInWithPopup(auth, provider).then((result) => {
+            localStorage.setItem("isAuth", true);
+            setIsAuth(true);
+        }) .then(()=>{location.reload()})
+          
+        .then( async ()=>{
+            const userId = auth.currentUser.uid
+            await setDoc(doc(db, "usuarios",userId), {
+                iduser: auth.currentUser.uid,
+                username: auth.currentUser.displayName,
+                photoURL: auth.currentUser.photoURL
+            })
+        }) .catch((error)=> console.log(error))
+    };
+```
+
+### Login using *signInWithEmailAndPassword*
+
+
+```js
+    function logInWEmailPassword (email, password) {
+      signInWithEmailAndPassword(auth, email, password).then((result) => {
+          localStorage.setItem("isAuth", true);
+          setIsAuth(true);
+      }) .then(()=>{location.reload()})
+      
+      .then( async ()=>{
+        const docId = auth.currentUser.uid;          
+        await setDoc(doc(db, "usuarios",docId), {
+              iduser: auth.currentUser.uid,
+              username: auth.currentUser.displayName,
+              photoURL: auth.currentUser.photoURL
+          })
+      }) .catch((error)=> console.log(error))
+    };
+```
+
+
