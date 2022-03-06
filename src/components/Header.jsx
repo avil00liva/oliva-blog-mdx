@@ -35,7 +35,7 @@ const Headernav = () => {
 
   return (
     <>
-      <nav className='flex justify-between items-center px-4 pt-8 pb-8 tablet:pb-16 w-full min-h-[60px] tablet:max-w-3xl tablet:m-auto laptop:flex-row-reverse'>
+      <nav className='dark:bg-black flex justify-between items-center px-4 pt-8 pb-8 tablet:pb-16 w-full min-h-[60px] tablet:max-w-3xl tablet:m-auto laptop:flex-row-reverse'>
           <RiMenu4Fill className='laptop:hidden text-2xl cursor-pointer ' onClick={handleShow}/>
           {renderThemeChanger()}
           <ul className='hidden items-center gap-3 laptop:flex'>

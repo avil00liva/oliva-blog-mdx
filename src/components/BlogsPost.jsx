@@ -14,7 +14,7 @@ export default function BlogsPost({posts}) {
         {posts.reverse().map((post, index)=>{
           return (
             <>
-              <div className='w-full min-h-[100px] rounded-lg bg-gray-200 dark:bg-gray-900 shadow-lg p-0 pb-8 mb-8' key={index}>
+              <div className='w-full min-h-[100px] rounded-lg bg-gray-200 dark:bg-[#262626] shadow-lg p-0 pb-8 mb-8' key={index}>
                 <div className="relative overflow-hidden shadow-md pb-80 mb-6">
                   <img className="object-top absolute h-80 w-full object-cover shadow-lg rounded-t-lg laptop:rounded-lg" src={post.photoUrl}/>
                 </div>
