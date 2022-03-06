@@ -1,7 +1,6 @@
 import { MDXRemote } from "next-mdx-remote"
 import { getFileBySlug, getFiles } from "../lib/mdx"
 import LayoutBlog from "../src/components/LayoutBlog";
-import Youtube from "../src/components/YouTube";
 import Head from 'next/head'
 import "../node_modules/highlight.js/styles/atom-one-dark.css"
 
@@ -12,7 +11,7 @@ export default function Post ({source, frontmatter}) {
           <Head>
             <title>Oliva Personal Blog</title>
           </Head>
-          <MDXRemote {...source} components={{Youtube}} />
+          <MDXRemote {...source} />
         </LayoutBlog>
     )
 }
