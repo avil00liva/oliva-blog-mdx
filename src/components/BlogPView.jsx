@@ -7,15 +7,15 @@ const BlogPView = ({posts}) => {
         <h3 className='font-bold text-2xl tablet:text-4xl tracking-tight mb-6 text-black dark:text-white'>
             Blogs preview
         </h3>
-        <div className='flex flex-col gap-6 tablet:flex-row'>
+        <div className='flex flex-col tablet:gap-6 tablet:flex-row'>
             {posts.slice(0, 3).reverse().map((post)=>{
                 return (
                     <>
                     <Link href={`/${post.slug}`} key={post.slug} className="mdStyle">
-                        <a className='transform hover:scale-[1.01] transition-all rounded-xl w-full tablet:w-1/3 bg-gradient-to-r p-1 from-[#D8B4FE] to-[#818CF8] min-h-[100px]'>
+                        <a className='my-4 tablet:max-h-[256px] tablet:min-h-[248px] transform hover:scale-[1.01] transition-all rounded-xl w-full tablet:w-1/3 bg-gradient-to-r p-1 from-[#D8B4FE] to-[#818CF8]'>
                             <div className='flex flex-col justify-between h-full bg-gray-100 dark:bg-black  rounded-lg p-4'>
                                 <div className='flex flex-col justify-between'>
-                                    <h4 className='text-lg tablet:text-lg font-medium mb-6 quini:mb-10 w-full text-gray-900 dark:text-gray-100 tracking-tight'>
+                                    <h4 className='text-lg tablet:text-lg font-medium mb-6 tablet:mb-4 quini:mb-10 w-full text-gray-900 dark:text-gray-100 tracking-tight'>
                                         {post.title}
                                     </h4>
                                     <h5 className='text-xs dark:text-green-300 mb-2'>{post.date}</h5>
