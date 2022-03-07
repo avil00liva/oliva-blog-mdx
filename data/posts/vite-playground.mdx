@@ -1,0 +1,313 @@
+---
+title: Make your own playground!! 🏓
+tags: 
+ - javascript
+ - vite
+ - playground
+date: "2022-03-07"
+excerpt: Basic playground using javascript, build with vite.
+photoUrl: https://i.imgur.com/KH0dwWu.jpg
+---
+
+# Make your own playground!! 🏓
+
+<small className="ml-2 text-sm text-gray-700 dark:text-gray-300 mb-4">Avilo Oliva / March 07,2022</small>
+
+
+![Playground ilustration](https://i.imgur.com/KH0dwWu.jpg "Playground ilustration")
+
+
+Create a playground that you can use for your practice or just for pass the time. 😋
+
+Start creating the project with **[Vite](https://vitejs.dev/)**
+
+
+## Steps:
+
+* Create the project without a template
+```md
+$ npm create vite@latest
+
+$ yarn create vite
+
+$ pnpm create vite
+```
+
+
+* Create the project using *--template*
+```md
+# npm 6.x
+npm create vite@latest my-playground-app --template vanilla
+
+# npm 7+, extra double-dash is needed:
+npm create vite@latest my-playground-app -- --template vanilla
+
+# yarn
+yarn create vite my-playground-app --template vanilla
+
+# pnpm
+pnpm create vite my-playground-app -- --template vanilla
+```
+
+
+* Dependencies needed: 
+```md
+$ npm i js-base64
+
+$ npm i split-grid
+```
+
+*Next in the **HTML** file do something like this:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="toy-bucket-pixel.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avilo's Playground</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="grid">
+        <div class="areasContent">
+          <textarea id="html" cols="30" rows="10" class="areaHtml"></textarea>
+          <img src="./assets/images/html-icon.png" alt="bucket" width="50px" height="50px">
+        </div>
+        <div class="areasContent">
+          <textarea id="css" cols="30" rows="10" class="areaCss"></textarea>
+          <img src="./assets/images/css-icon.png" alt="bucket" width="50px" height="50px">
+        </div>
+        <div class="areasContent">
+          <textarea id="js" cols="30" rows="10" class="areaJs"></textarea>
+          <img src="./assets/images/js-icon.png" alt="bucket" width="50px" height="50px">
+        </div>
+        <div>
+          <iframe srcdoc="<h1>Hola solo texto</h1>"></iframe>
+        </div>
+        <div class="horizontal-gutter"></div>
+        <div class="vertical-gutter"></div>
+      </div>
+    </div>
+  </body>
+</html>
+```
+* Create a **javascript** file and adding to the **HTML** file before closing the body:
+```html
+    <script type="module" src="/main.js"></script>
+
+    </body>
+</html>
+```
+
+## **Javascript** file:
+
+* Import the dependencies we installed at the beginning
+
+
+```js
+import './style.css'
+import Split from 'split-grid'
+import { encode, decode } from 'js-base64'
+```
+<small className="ml-2 text-sm text-gray-700 dark:text-gray-300 mb-4">The css will be added later </small>
+
+
+* Create the variables and the events
+
+```js
+const $ = selector => document.querySelector(selector)
+
+window.location.pathname 
+
+const $html = $("#html")
+const $js = $("#js")
+const $css = $("#css")
+
+$html.addEventListener("input", update)
+$js.addEventListener("input", update)
+$css.addEventListener("input", update)
+```
+
+
+* We have to create 2 functions that will allow us to get the values ​​of the inputs and thus be able to see the preview in the iframe tag
+
+```js
+function init() {
+    const { pathname } = window.location
+    const [rawHtml, rawCss, rawJs] = pathname.slice(1).split("%7C") 
+    
+    const html = decode(rawHtml)
+    const css = decode(rawCss)
+    const js = decode(rawJs)
+    
+    $html.value = html
+    $css.value = css
+    $js.value = js
+
+    const htmlForPreview = createHtml({html, css, js})
+    $('iframe').setAttribute("srcdoc", htmlForPreview)
+}
+
+function update(){
+    const html = $html.value
+    const css = $css.value
+    const js = $js.value
+
+    const hashedCode = `${encode(html)}|${encode(css)}|${encode(js)}`
+
+   window.history.replaceState(null, null, `/${hashedCode}`)
+
+    const htmlForPreview = createHtml({html, css, js})
+    $('iframe').setAttribute("srcdoc", htmlForPreview)
+}
+```
+
+* Now it's time to use **split-grid** which is already imported
+
+```js
+Split({
+	columnGutters: [{
+    track: 1,
+    element: document.querySelector('.vertical-gutter'),
+  }],
+  rowGutters: [{
+  	track: 1,
+    element: document.querySelector('.horizontal-gutter'),
+  }]
+})
+```
+<small className="ml-2 text-sm text-gray-700 dark:text-gray-300 mb-4">This allows us to adjust the size of the cell </small>
+
+
+* And to finish we have to create the variable **createHtml**
+
+```js
+const createHtml = ({html, css, js})=> {
+
+    return `
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <style>
+                ${css}
+            </style>
+        </head>
+        <body>
+        ${html}
+        <script>
+            ${js}     
+        </script>
+        </body>
+        </html>
+    `
+}
+```
+
+
+### Don't forget to initialize the **init** function at the end
+
+```js
+init()
+```
+
+## Adding some styling 💅🏼
+
+* Make it simple: create a **CSS** file and passing some styles for now
+
+```css
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: monospace;
+}
+
+::-webkit-scrollbar{
+  width: 5px;
+  height: 5px;
+  }
+  ::-webkit-scrollbar-thumb{
+  background: #05a081;
+  border-radius: 2px;
+  }
+  ::-webkit-scrollbar-thumb:hover{
+  background: #B3AFB3;
+  }
+  ::-webkit-scrollbar-track{
+  background: transparent;
+  border-radius: 0px;
+  box-shadow: inset 0px 0px 0px 0px #F0F0F0;
+  }
+
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #fff;
+  background: #000;
+  background-image: url("./assets/images/playground.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 10px 1fr;
+  grid-template-rows: 1fr 10px 1fr;
+  height: 100vh;
+}
+
+.areasContent {
+  position: relative;
+} .areasContent > img {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  opacity: 0.8;
+}
+
+textarea {
+  background: #33333399;
+  box-shadow: 0 0 0 .1px rgba(255,255,255,.3);
+  color: #fff;
+  font-family: monospace;
+  font-size: 18px;
+  padding: 24px;
+  resize: none;
+  width: 100%;
+  height: 100%;
+}
+
+textarea:focus {
+  outline: 0;
+}
+
+iframe {
+  width: 100%;
+  height: 100%;
+  background: #ffffff55;
+}
+
+.vertical-gutter {
+  grid-area: 1 / 2 / 4 / 2;
+  background-color: #262626;
+  cursor: col-resize;
+}
+
+.horizontal-gutter {
+  grid-area: 2 / 1 / 2 / 4;
+  background: #262626;
+  cursor: row-resize;
+}
+```
+<small className="ml-2 text-sm text-gray-700 dark:text-gray-300 mb-4">In my case i add a background-image, you can see the entire project in my Github below </small>
+
+****
+
+
+<span className="ml-2 text-xl text-green-700 dark:text-green-400 mb-4">
+**[You can see the entire project on my Github](https://github.com/avil00liva/avilo-playground)** ⭐
+</span>
